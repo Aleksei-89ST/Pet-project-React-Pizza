@@ -1,8 +1,9 @@
 import Categories from "./components/Categories";
 import Sort from "./components/Sort";
-import PizzaBlock from "./components/PizzaBlock";
 import Header from "./components/Header";
+import PizzaBlock from "./components/PizzaBlock";
 import "./scss/app.scss";
+
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           </div>
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
-            <PizzaBlock />
+            <PizzaBlock title="Peperoni" price={250}/>
           </div>
         </div>
       </div>
