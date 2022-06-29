@@ -7,10 +7,11 @@ import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryId } from "../redux/slices/filterSlice";
+import axios from "axios";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const {categoryId,sort} = useSelector((state) => state.filter);
+  const { categoryId, sort } = useSelector((state) => state.filter);
   const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,14 +26,23 @@ const Home = () => {
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
-    fetch(
-      `https://62b41f5aa36f3a973d2c669d.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
-    )
-      .then((res) => res.json())
-      .then((arr) => {
-        setItems(arr);
+    // fetch(
+    //   `https://62b41f5aa36f3a973d2c669d.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
+    // )
+    //   .then((res) => res.json())
+    //   .then((arr) => {
+    //     setItems(arr);
+    //     setIsLoading(false);
+    //   });
+    axios
+      .get(
+        `https://62b41f5aa36f3a973d2c669d.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
+      )
+      .then((res) => {
+        setItems(res.data);
         setIsLoading(false);
       });
+      
     window.scrollTo(0, 0);
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
   const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
