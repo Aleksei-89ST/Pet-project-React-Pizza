@@ -35,35 +35,37 @@ const Home = () => {
     dispatch(setCurrentPage(page));
   };
 
-  const fetchPizzas = () => {
+  const fetchPizzas = async () => {
     setIsLoading(true);
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
-
-    axios
-      .get(
-        `https://62b41f5aa36f3a973d2c669d.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
-  };
+try {
+  const res = await axios.get(
+    `https://62b41f5aa36f3a973d2c669d.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
+  );
+  setItems(res.data);
+} catch (error) {
+  console.log('Ошибка при получении пицц');
+} finally {
+  setIsLoading(false);
+}
+  window.scrollTo(0, 0);
+}
   // Если изменили параметры и был первый рендер
   useEffect(() => {
     if (isMounted.current) {
-     const queryString = qs.stringify({
-       sortProperty: sort.sortProperty,
-       categoryId,
-       currentPage,
-     });
-     navigate(`?${queryString}`);
+      const queryString = qs.stringify({
+        sortProperty: sort.sortProperty,
+        categoryId,
+        currentPage,
+      });
+      navigate(`?${queryString}`);
     }
-    isMounted.current = true
-     }, [categoryId, sort.sortProperty, currentPage]);
-// Если был первый рендер то проверяем параметры и сохраняем их в редуксе
+    isMounted.current = true;
+  }, [categoryId, sort.sortProperty, currentPage]);
+  // Если был первый рендер то проверяем параметры и сохраняем их в редуксе
   useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
@@ -79,7 +81,7 @@ const Home = () => {
       isSearch.current = true;
     }
   }, []);
-// Если был первый рендер то запрашиваем пиццы
+  // Если был первый рендер то запрашиваем пиццы
   useEffect(() => {
     window.scrollTo(0, 0);
     if (!isSearch.current) {
@@ -87,8 +89,6 @@ const Home = () => {
     }
     isSearch.current = false;
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
-
-
 
   const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
   const sceletons = [...new Array(6)].map((_, index) => (
