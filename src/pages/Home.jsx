@@ -7,6 +7,7 @@ import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  selectFiter,
   setCategoryId,
   setCurrentPage,
   setFilters,
@@ -14,7 +15,7 @@ import {
 import axios from "axios";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -23,9 +24,9 @@ const Home = () => {
   const isMounted = useRef(false);
 
   const { categoryId, sort, currentPage } = useSelector(
-    (state) => state.filter
+    selectFiter
   );
-  const { items, status } = useSelector((state) => state.pizza);
+  const { items, status } = useSelector(selectPizzaData);
   const { searchValue } = useContext(SearchContext);
 
   const onChangeCategory = (id) => {
