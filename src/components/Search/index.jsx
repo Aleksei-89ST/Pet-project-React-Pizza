@@ -1,21 +1,22 @@
 import React, { useCallback, useContext, useRef, useState } from "react";
 import styles from "./Search.module.scss";
 import { GrClose } from "react-icons/gr";
-import { SearchContext } from "../../App";
 import debounce from "lodash.debounce";
+import { useDispatch } from "react-redux";
+import { setSearchValue } from "../../redux/slices/filterSlice";
 
 const Search = () => {
-  const [value, setValue] = useState("");
-  const {setSearchValue } = useContext(SearchContext);
+  const dispatch = useDispatch()
+  const [value, setValue] = useState("");;
   const inputRef = useRef(); // обращаюсь к ссылке - дом элементов
 
   const onClickClear = () => {
-    setSearchValue("");
+    dispatch(setSearchValue(''));
     setValue('');
     inputRef.current.focus();
   };
   const updateSearchValue = useCallback(debounce((str) => {
-      setSearchValue(str);
+    dispatch(setSearchValue(str));
     }, 250),
     []
   );

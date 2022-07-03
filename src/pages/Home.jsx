@@ -23,11 +23,10 @@ const Home = () => {
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
-  const { categoryId, sort, currentPage } = useSelector(
+  const { categoryId, sort, currentPage ,searchValue} = useSelector(
     selectFiter
   );
   const { items, status } = useSelector(selectPizzaData);
-  const { searchValue } = useContext(SearchContext);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
