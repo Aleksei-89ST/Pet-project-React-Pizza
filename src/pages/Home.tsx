@@ -1,10 +1,9 @@
 import Categories from "../components/Categories";
-import { useContext, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import Skeleton from "../components/Pizza-Block/Skeleton";
 import PizzaBlock from "../components/Pizza-Block";
 import Sort, { sortList } from "../components/Sort";
 import Pagination from "../components/Pagination";
-import { SearchContext } from "../App";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectFiter,
@@ -12,12 +11,11 @@ import {
   setCurrentPage,
   setFilters,
 } from "../redux/slices/filterSlice";
-import axios from "axios";
 import qs from "qs";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 
-const Home = () => {
+const Home: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSearch = useRef(false);
@@ -28,11 +26,11 @@ const Home = () => {
   );
   const { items, status } = useSelector(selectPizzaData);
 
-  const onChangeCategory = (id) => {
-    dispatch(setCategoryId(id));
+  const onChangeCategory = (idx:number) => {
+    dispatch(setCategoryId(idx));
   };
-  const onChangePage = (number) => {
-    dispatch(setCurrentPage(number));
+  const onChangePage = (page:number) => {
+    dispatch(setCurrentPage(page));
   };
 
   const getPizzas = async () => {
@@ -42,6 +40,7 @@ const Home = () => {
     const search = searchValue ? `&search=${searchValue}` : "";
 
     dispatch(
+      // @ts-ignore
       fetchPizzas({
         sortBy,
         order,
@@ -85,7 +84,7 @@ const Home = () => {
     getPizzas();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-  const pizzas = items.map((obj) => <Link key={obj.id} to={`pizza/${obj.id}`}><PizzaBlock {...obj} /></Link>);
+  const pizzas = items.map((obj:any) => <Link key={obj.id} to={`pizza/${obj.id}`}><PizzaBlock {...obj} /></Link>);
   const sceletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));

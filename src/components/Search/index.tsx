@@ -1,28 +1,34 @@
-import React, { useCallback, useContext, useRef, useState } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 import styles from "./Search.module.scss";
 import { GrClose } from "react-icons/gr";
 import debounce from "lodash.debounce";
 import { useDispatch } from "react-redux";
 import { setSearchValue } from "../../redux/slices/filterSlice";
 
-const Search = () => {
-  const dispatch = useDispatch()
-  const [value, setValue] = useState("");;
-  const inputRef = useRef(); // обращаюсь к ссылке - дом элементов
+const Search: FC = () => {
+  const dispatch = useDispatch();
+  const [value, setValue] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null); // обращаюсь к ссылке - дом элементов
 
   const onClickClear = () => {
-    dispatch(setSearchValue(''));
-    setValue('');
-    inputRef.current.focus();
+    dispatch(setSearchValue(""));
+    setValue("");
+    // if (inputRef.current) {
+    //   inputRef.current.focus();
+    // }
+
+    //с помощью оператора (?) опциональной последовательности
+    inputRef.current?.focus();
   };
-  const updateSearchValue = useCallback(debounce((str) => {
-    dispatch(setSearchValue(str));
+  const updateSearchValue = useCallback(
+    debounce((str:string) => {
+      dispatch(setSearchValue(str));
     }, 250),
     []
   );
-  const onChangeInput = (event) => {
+  const onChangeInput = (event:any) => {
     setValue(event.target.value);
-    updateSearchValue(event.target.value)
+    updateSearchValue(event.target.value);
   };
   return (
     <div className={styles.root}>
@@ -88,9 +94,7 @@ const Search = () => {
         className={styles.input}
         placeholder="Поиск пиццы..."
       />
-      {value && (
-        <GrClose onClick={onClickClear} className={styles.clearIcon} />
-      )}
+      {value && <GrClose onClick={onClickClear} className={styles.clearIcon} />}
     </div>
   );
 };
