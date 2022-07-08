@@ -1,5 +1,4 @@
-import React, { FC } from "react";
-import LogoSvg from "../assets/img/pizza-logo.svg";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "../components/Search/CartItem";

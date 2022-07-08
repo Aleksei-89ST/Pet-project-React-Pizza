@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef, useState } from "react";
+import { ChangeEvent, FC, MouseEvent, useCallback, useRef, useState } from "react";
 import styles from "./Search.module.scss";
 import { GrClose } from "react-icons/gr";
 import debounce from "lodash.debounce";
@@ -26,7 +26,7 @@ const Search: FC = () => {
     }, 250),
     []
   );
-  const onChangeInput = (event:any) => {
+  const onChangeInput = (event:ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
     updateSearchValue(event.target.value);
   };

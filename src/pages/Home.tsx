@@ -1,5 +1,5 @@
 import Categories from "../components/Categories";
-import { FC, useContext, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef } from "react";
 import Skeleton from "../components/Pizza-Block/Skeleton";
 import PizzaBlock from "../components/Pizza-Block";
 import Sort, { sortList } from "../components/Sort";

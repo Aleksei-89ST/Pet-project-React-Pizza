@@ -1,13 +1,15 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, MouseEvent, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSort, setSort } from "../redux/slices/filterSlice";
 
 type SortItem = {
   name: string;
   sortProperty: string;
-}
-
-export const sortList:SortItem[] = [
+};
+type PopupClick = MouseEvent<HTMLBodyElement> & {
+  path: Node[];
+};
+export const sortList: SortItem[] = [
   { name: "популярности (DESC)", sortProperty: "rating" },
   { name: "популярности (ASC)", sortProperty: "-rating" },
   { name: "цене (DESC)", sortProperty: "price" },
@@ -16,20 +18,21 @@ export const sortList:SortItem[] = [
   { name: "алфавиту (ASC)", sortProperty: "-title" },
 ];
 
-export const Sort = () => {
+export const Sort: FC = () => {
   const dispatch = useDispatch();
   const sort = useSelector(selectSort);
-  // куа не разрешает хранить undefined-по умолчанию нужно типизировать useRef вот так: <HTMLDivElement>(null)
+  // ref не разрешает хранить undefined-по умолчанию нужно типизировать useRef вот так: <HTMLDivElement>(null)
   const sortRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
-  const onClickListItem = (obj:SortItem) => {
+  const onClickListItem = (obj: SortItem) => {
     dispatch(setSort(obj));
     setOpen(false);
   };
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (!event.path.includes(sortRef.current)) {
+    const handleClickOutside = (event:any) => {
+      const _event = event as PopupClick;
+      if (sortRef.current && !_event.path.includes(sortRef.current)) {
         setOpen(false);
       }
     };
