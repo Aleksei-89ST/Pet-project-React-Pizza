@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
-import { CartItem } from "./cartSlice";
+
 
 // если уверен что все обьекты это строки то можно делать с помощью Record!
 export const fetchPizzas = createAsyncThunk<Pizza[], Record<string, string>>(
