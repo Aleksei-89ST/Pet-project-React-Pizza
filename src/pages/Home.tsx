@@ -2,89 +2,90 @@ import Categories from "../components/Categories";
 import { FC, useEffect, useRef } from "react";
 import Skeleton from "../components/Pizza-Block/Skeleton";
 import PizzaBlock from "../components/Pizza-Block";
-import Sort, { sortList } from "../components/Sort";
+import Sort from "../components/Sort";
 import Pagination from "../components/Pagination";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   selectFiter,
   setCategoryId,
   setCurrentPage,
-  setFilters,
 } from "../redux/slices/filterSlice";
 import qs from "qs";
-import { Link, useNavigate } from "react-router-dom";
-import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
+import { useNavigate } from "react-router-dom";
+import {
+  fetchPizzas,
+  selectPizzaData,
+} from "../redux/slices/pizzaSlice";
 import { useAppDispatch } from "../redux/store";
 
 const Home: FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isSearch = useRef(false);
-  const isMounted = useRef(false);
+  // const isSearch = useRef(false);
+  // const isMounted = useRef(false);
 
-  const { categoryId, sort, currentPage ,searchValue} = useSelector(
-    selectFiter
-  );
+  const { categoryId, sort, currentPage, searchValue } =
+    useSelector(selectFiter);
   const { items, status } = useSelector(selectPizzaData);
 
-  const onChangeCategory = (idx:number) => {
+  const onChangeCategory = (idx: number) => {
     dispatch(setCategoryId(idx));
   };
-  const onChangePage = (page:number) => {
+  const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page));
   };
-
   const getPizzas = async () => {
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
-
     dispatch(
       fetchPizzas({
         sortBy,
         order,
         category,
         search,
-        currentPage,
+        currentPage: String(currentPage),
       })
     );
     window.scrollTo(0, 0);
   };
   // Если изменили параметры и был первый рендер
-  useEffect(() => {
-    if (isMounted.current) {
-      const queryString = qs.stringify({
-        sortProperty: sort.sortProperty,
-        categoryId,
-        currentPage,
-      });
-      navigate(`?${queryString}`);
-    }
-    isMounted.current = true;
-  }, [categoryId, sort.sortProperty, currentPage]);
+  // useEffect(() => {
+  //   if (isMounted.current) {
+  //     const queryString = qs.stringify({
+  //       sortProperty: sort.sortProperty,
+  //       categoryId,
+  //       currentPage,
+  //     });
+  //     navigate(`?${queryString}`);
+  //   }
+  //   isMounted.current = true;
+  // }, [categoryId, sort.sortProperty, currentPage]);
   // Если был первый рендер то проверяем параметры и сохраняем их в редуксе
-  useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const sort = sortList.find(
-        (obj) => obj.sortProperty === params.sortProperty
-      );
-      dispatch(
-        setFilters({
-          ...params,
-          sort,
-        })
-      );
-      isSearch.current = true;
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.location.search) {
+  //     const params = qs.parse(window.location.search.substring(1)) as unknown as TSearchPizzaParams;
+  //     const sort = sortList.find(
+  //       (obj) => obj.sortProperty === params.sortBy
+  //     );
+  //     dispatch(setFilters({
+  //        searchValue: params.search,
+  //        categoryId: Number(params.category),
+  //        currentPage: Number (params.currentPage),
+  // тут сказана если не придёт undefined передай sort иначе передавай по популярности
+  //        sort:sort || sortList[0],
+  //       })
+  //     );
+  //     isSearch.current = true;
+  //   }
+  // }, []);
   // Если был первый рендер то запрашиваем пиццы
   useEffect(() => {
     getPizzas();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-  const pizzas = items.map((obj:any) => <Link key={obj.id} to={`pizza/${obj.id}`}><PizzaBlock {...obj} /></Link>);
+  const pizzas = items.map((obj) => <PizzaBlock {...obj} />);
   const sceletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
@@ -98,17 +99,18 @@ const Home: FC = () => {
       {status === "error" ? (
         <div className="content__error-info">
           <h2>Произошла ошибка 😕</h2>
-          <p>К сожалению,не удалось получить питсы. Попробуйте повторить попытку позже.</p>
+          <p>
+            К сожалению,не удалось получить питсы. Попробуйте повторить попытку
+            позже.
+          </p>
         </div>
       ) : (
         <div className="content__items">
           {status === "loading" ? sceletons : pizzas}
         </div>
       )}
-
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   );
 };
-
 export default Home;

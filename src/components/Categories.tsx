@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 // создал первый тип для props
-type CategoriesProps = {
+type TCategoriesProps = {
   value: number;
   onChangeCategory: (idx: number) => void;
 };
@@ -14,7 +14,7 @@ const categories = [
   "Закрытые",
 ];
 
-const Categories: FC<CategoriesProps> = ({ value, onChangeCategory }) => {
+const Categories: FC<TCategoriesProps> = ({ value, onChangeCategory }) => {
   return (
     <div className="categories">
       <ul>

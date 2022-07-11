@@ -1,4 +1,10 @@
-import { ChangeEvent, FC, MouseEvent, useCallback, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import styles from "./Search.module.scss";
 import { GrClose } from "react-icons/gr";
 import debounce from "lodash.debounce";
@@ -7,12 +13,12 @@ import { setSearchValue } from "../../redux/slices/filterSlice";
 
 const Search: FC = () => {
   const dispatch = useDispatch();
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null); // обращаюсь к ссылке - дом элементов
 
   const onClickClear = () => {
-    dispatch(setSearchValue(""));
-    setValue("");
+    dispatch(setSearchValue(''));
+    setValue('');
     // if (inputRef.current) {
     //   inputRef.current.focus();
     // }
@@ -21,12 +27,12 @@ const Search: FC = () => {
     inputRef.current?.focus();
   };
   const updateSearchValue = useCallback(
-    debounce((str:string) => {
+    debounce((str: string) => {
       dispatch(setSearchValue(str));
     }, 250),
     []
   );
-  const onChangeInput = (event:ChangeEvent<HTMLInputElement>) => {
+  const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
     updateSearchValue(event.target.value);
   };
