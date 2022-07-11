@@ -2,11 +2,16 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
 
-
+export type TSearchPizzaParams = {
+  sortBy: string;
+  order: string;
+  category: string;
+  search: string;
+  currentPage: string;
+};
 // если уверен что все обьекты это строки то можно делать с помощью Record!
-export const fetchPizzas = createAsyncThunk<Pizza[], Record<string, string>>(
+export const fetchPizzas = createAsyncThunk<Pizza[], TSearchPizzaParams>(
   "pizza/fetchPizzasStatus",
-
   async (params) => {
     const { sortBy, order, category, search, currentPage } = params;
     const { data } = await axios.get<Pizza[]>(
@@ -15,7 +20,6 @@ export const fetchPizzas = createAsyncThunk<Pizza[], Record<string, string>>(
     return data;
   }
 );
-
 type Pizza = {
   id: string;
   title: string;
@@ -25,19 +29,16 @@ type Pizza = {
   types: number[];
   rating: number;
 };
-
 // Перечисление — это специальный «класс», представляющий группу констант (неизменяемых переменных).
 export enum Status {
   LOADING = "loading",
   SUCCES = "success",
   ERROR = "error",
 }
-
 interface PizzaSliceState {
   items: Pizza[];
   status: Status;
 }
-
 const initialState: PizzaSliceState = {
   items: [],
   status: Status.LOADING,
@@ -53,13 +54,14 @@ const pizzaSlice = createSlice({
   // Чтобы типизировать extraReducers нужно следовать примеру с builder.addCase
   extraReducers: (builder) => {
     builder.addCase(fetchPizzas.pending, (state, action) => {
-      (state.status = Status.LOADING), (state.items = []);
+      state.status = Status.LOADING, 
+      state.items = [];
     });
     builder.addCase(fetchPizzas.fulfilled, (state, action) => {
       state.items = action.payload;
       state.status = Status.SUCCES;
     });
-    builder.addCase(fetchPizzas.rejected, (state, action) => {
+    builder.addCase(fetchPizzas.rejected, (state,action) => {
       state.status = Status.ERROR;
       state.items = [];
     });
