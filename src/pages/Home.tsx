@@ -85,7 +85,7 @@ const Home: FC = () => {
     getPizzas();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-  const pizzas = items.map((obj) => <PizzaBlock {...obj} />);
+  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
   const sceletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
