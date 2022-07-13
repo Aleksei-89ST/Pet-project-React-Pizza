@@ -1,5 +1,5 @@
 import Categories from "../components/Categories";
-import { FC, useEffect, useRef } from "react";
+import { FC, useCallback, useEffect, useRef } from "react";
 import Skeleton from "../components/Pizza-Block/Skeleton";
 import PizzaBlock from "../components/Pizza-Block";
 import Sort from "../components/Sort";
@@ -28,9 +28,9 @@ const Home: FC = () => {
     useSelector(selectFiter);
   const { items, status } = useSelector(selectPizzaData);
 
-  const onChangeCategory = (idx: number) => {
-    dispatch(setCategoryId(idx));
-  };
+  const onChangeCategory = useCallback((idx: number) => {
+    dispatch(setCategoryId(idx))
+  },[]);
   const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page));
   };
@@ -93,7 +93,7 @@ const Home: FC = () => {
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-        <Sort />
+        <Sort value={sort}/>
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === "error" ? (
