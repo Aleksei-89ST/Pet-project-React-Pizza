@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 
 // создал первый тип для props
 type TCategoriesProps = {
@@ -14,7 +14,7 @@ const categories = [
   "Закрытые",
 ];
 
-const Categories: FC<TCategoriesProps> = ({ value, onChangeCategory }) => {
+const Categories: FC<TCategoriesProps> = memo(({ value, onChangeCategory }) => {
   return (
     <div className="categories">
       <ul>
@@ -30,5 +30,5 @@ const Categories: FC<TCategoriesProps> = ({ value, onChangeCategory }) => {
       </ul>
     </div>
   );
-};
+});
 export default Categories;

@@ -1,6 +1,6 @@
-import { FC, MouseEvent, useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { selectSort, setSort, SortPropertyEnum } from "../redux/slices/filterSlice";
+import { FC, memo, MouseEvent, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSort, Sort, SortPropertyEnum } from "../redux/slices/filterSlice";
 
 type SortItem = {
   name: string;
@@ -9,6 +9,9 @@ type SortItem = {
 type PopupClick = MouseEvent<HTMLBodyElement> & {
   path: Node[];
 };
+type TSortPopupProps = {
+  value: Sort;
+}
 export const sortList: SortItem[] = [
   { name: "популярности (DESC)", sortProperty: SortPropertyEnum.RATING_DESC },
   { name: "популярности (ASC)", sortProperty: SortPropertyEnum.RATING_ASC },
@@ -18,9 +21,8 @@ export const sortList: SortItem[] = [
   { name: "алфавиту (ASC)", sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-export const SortPopup: FC = () => {
+export const SortPopup: FC<TSortPopupProps> = memo( ({value}) => {
   const dispatch = useDispatch();
-  const sort = useSelector(selectSort);
   // ref не разрешает хранить undefined-по умолчанию нужно типизировать useRef вот так: <HTMLDivElement>(null)
   const sortRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -56,7 +58,7 @@ export const SortPopup: FC = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{sort.name}</span>
+        <span onClick={() => setOpen(!open)}>{value.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -68,7 +70,7 @@ export const SortPopup: FC = () => {
                   onClickListItem(obj);
                 }}
                 className={
-                  sort.sortProperty === obj.sortProperty ? "active" : ""
+                  value.sortProperty === obj.sortProperty ? "active" : ""
                 }
               >
                 {obj.name}
@@ -79,5 +81,5 @@ export const SortPopup: FC = () => {
       )}
     </div>
   );
-};
+});
 export default SortPopup;
