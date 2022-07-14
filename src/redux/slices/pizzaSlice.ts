@@ -54,7 +54,7 @@ const pizzaSlice = createSlice({
   // Чтобы типизировать extraReducers нужно следовать примеру с builder.addCase
   extraReducers: (builder) => {
     builder.addCase(fetchPizzas.pending, (state, action) => {
-      state.status = Status.LOADING, 
+      state.status = Status.LOADING; 
       state.items = [];
     });
     builder.addCase(fetchPizzas.fulfilled, (state, action) => {
