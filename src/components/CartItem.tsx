@@ -1,12 +1,8 @@
 import { FC } from "react";
 import clsx from "clsx";
 import { useDispatch } from "react-redux";
-import {
-  addItem,
-  TCartItem,
-  minusItem,
-  removeItem,
-} from "../../redux/slices/cartSlice";
+import { addItem, minusItem, removeItem } from "../redux/cart/slice";
+import { TCartItem } from "../redux/cart/types";
 
 type CartItemProps = {
   id: string;
@@ -57,9 +53,12 @@ const CartItemBlock: FC<CartItemProps> = ({
         </div>
         <div className="cart__item-count">
           <button
-          disabled={count === 1}
+            disabled={count === 1}
             onClick={onClickMinus}
-            className={clsx("button button--outline button--circle cart__item-count-minus",{'cart__item-count-minus--disabled':count === 1})}
+            className={clsx(
+              "button button--outline button--circle cart__item-count-minus",
+              { "cart__item-count-minus--disabled": count === 1 }
+            )}
           >
             <svg
               width="10"

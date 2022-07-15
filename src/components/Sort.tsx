@@ -1,6 +1,7 @@
 import { FC, memo, MouseEvent, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setSort, Sort, SortPropertyEnum } from "../redux/slices/filterSlice";
+import { setSort } from "../redux/filter/slice";
+import { Sort, SortPropertyEnum } from "../redux/filter/types";
 
 type SortItem = {
   name: string;
@@ -11,17 +12,17 @@ type PopupClick = MouseEvent<HTMLBodyElement> & {
 };
 type TSortPopupProps = {
   value: Sort;
-}
+};
 export const sortList: SortItem[] = [
   { name: "популярности (DESC)", sortProperty: SortPropertyEnum.RATING_DESC },
   { name: "популярности (ASC)", sortProperty: SortPropertyEnum.RATING_ASC },
-  { name: "цене (DESC)", sortProperty: SortPropertyEnum.PRICE_DESC},
+  { name: "цене (DESC)", sortProperty: SortPropertyEnum.PRICE_DESC },
   { name: "цене (ASC)", sortProperty: SortPropertyEnum.PRICE_ASC },
   { name: "алфавиту (DESC)", sortProperty: SortPropertyEnum.TITLE_DESC },
   { name: "алфавиту (ASC)", sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-export const SortPopup: FC<TSortPopupProps> = memo( ({value}) => {
+export const SortPopup: FC<TSortPopupProps> = memo(({ value }) => {
   const dispatch = useDispatch();
   // ref не разрешает хранить undefined-по умолчанию нужно типизировать useRef вот так: <HTMLDivElement>(null)
   const sortRef = useRef<HTMLDivElement>(null);
@@ -32,7 +33,7 @@ export const SortPopup: FC<TSortPopupProps> = memo( ({value}) => {
     setOpen(false);
   };
   useEffect(() => {
-    const handleClickOutside = (event:any) => {
+    const handleClickOutside = (event: any) => {
       const _event = event as PopupClick;
       if (sortRef.current && !_event.path.includes(sortRef.current)) {
         setOpen(false);
