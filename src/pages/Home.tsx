@@ -11,6 +11,11 @@ import { setCategoryId, setCurrentPage } from "../redux/filter/slice";
 import { selectPizzaData } from "../redux/pizza/selectors";
 import { fetchPizzas } from "../redux/pizza/asyncActions";
 
+// это динамический импорт - тоесть отдельный chunk С помощью его можно подгрузить отдельно js кусок кода (ленивая подгрузка )
+// import("../utils/math").then(math => {
+//   console.log(math.add(555, 111));
+// });
+
 const Home: FC = () => {
   const dispatch = useAppDispatch();
   const { categoryId, sort, currentPage, searchValue } =
