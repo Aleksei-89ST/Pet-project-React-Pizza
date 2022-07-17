@@ -5,9 +5,9 @@ import MainLayout from "./Layouts/MainLayout";
 import React, { Suspense } from "react";
 
 // подгрузка Cart только усли это необходимо
-const Cart = React.lazy(() => import("./pages/Cart"));
-const FullPizza = React.lazy(() => import("./pages/FullPizza"));
-const NotFound = React.lazy(() => import("./pages/NotFound"));
+const Cart = React.lazy(() => import(/* webpackChunkName:'Cart' */"./pages/Cart"));
+const FullPizza = React.lazy(() => import(/* webpackChunkName:'FullPizza' */"./pages/FullPizza"));
+const NotFound = React.lazy(() => import(/* webpackChunkName:'NotFound' */"./pages/NotFound"));
 
 function App() {
   return (
