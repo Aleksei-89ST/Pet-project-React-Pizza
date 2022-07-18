@@ -1,9 +1,5 @@
-import Categories from "../components/Categories";
 import { FC, useCallback, useEffect } from "react";
-import Skeleton from "../components/Pizza-Block/Skeleton";
-import PizzaBlock from "../components/Pizza-Block";
-import Sort from "../components/Sort";
-import Pagination from "../components/Pagination";
+import {Skeleton,Categories,PizzaBlock,Sort,Pagination} from "../components";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../redux/store";
 import { selectFiter } from "../redux/filter/selectors";
@@ -15,7 +11,6 @@ import { fetchPizzas } from "../redux/pizza/asyncActions";
 // import("../utils/math").then(math => {
 //   console.log(math.add(555, 111));
 // });
-
 const Home: FC = () => {
   const dispatch = useAppDispatch();
   const { categoryId, sort, currentPage, searchValue } =
